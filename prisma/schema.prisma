@@ -1,0 +1,57 @@
+// schema.prisma
+
+datasource db {
+  provider = "mysql" // ou "postgresql", dependendo do seu banco de dados
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Usuario {
+  id      Int      @id @default(autoincrement())
+  nome    String   @db.VarChar(255)
+  email   String   @unique @db.VarChar(255)
+  senha   String   @db.VarChar(255)
+  token   String?   @db.VarChar(255)
+  favoritos Favorito[]
+}
+
+model Salao {
+  id        Int        @id @default(autoincrement())
+  nome      String     @db.VarChar(255)
+  logo      String     @db.VarChar(255)
+  endereco  String     @db.VarChar(255)
+  atendente Atendente? @relation(fields: [atendenteId], references: [id])
+  atendenteId Int?
+  servicos  Servico[]
+  favoritos  Favorito[] // Adiciona a relação com Favorito
+}
+
+model Servico {
+  id        Int      @id @default(autoincrement())
+  nome      String   @db.VarChar(255)
+  descricao String   @db.Text
+  valor     Float
+  salao     Salao    @relation(fields: [salaoId], references: [id])
+  salaoId   Int
+}
+
+model Favorito {
+  id        Int      @id @default(autoincrement())
+  usuario   Usuario  @relation(fields: [usuarioId], references: [id])
+  usuarioId Int
+  salao     Salao    @relation(fields: [salaoId], references: [id])
+  salaoId   Int
+
+  @@unique([usuarioId, salaoId]) // Garante que um usuário só possa ter um salão favorito uma vez
+}
+
+model Atendente {
+  id        Int      @id @default(autoincrement())
+  nome      String   @db.VarChar(255)
+  foto      String   @db.VarChar(255)
+  bio       String   @db.Text
+  salao     Salao[]  // Um atendente pode estar associado a múltiplos salões
+}

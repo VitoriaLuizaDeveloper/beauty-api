@@ -1,0 +1,51 @@
+### Teste de Registro de Usuário
+POST http://localhost:3000/cadastro
+Content-Type: application/json
+
+{
+  "nome": "João Silva",
+  "email": "joao.silva@example.com",
+  "senha": "senhaSegura123"
+}
+
+### Teste de Login de Usuário
+POST http://localhost:3000/login
+Content-Type: application/json
+
+{
+  "email": "maria@example.com",
+  "senha": "senha123"
+}
+
+### Listar todos os salões
+GET http://localhost:3000/saloes
+Content-Type: application/json
+Authorization: Bearer 7bae5cfe8d1ee2ae2710a148dd03af18
+
+### Obter detalhes de um salão específico
+GET http://localhost:3000/salao/1
+Content-Type: application/json
+Authorization: Bearer 7bae5cfe8d1ee2ae2710a148dd03af18
+
+### Adicionar salão aos favoritos
+POST http://localhost:3000/favoritos
+Content-Type: application/json
+Authorization: Bearer 7bae5cfe8d1ee2ae2710a148dd03af18
+
+{
+  "salaoId": 1
+}
+
+### Listar serviços de um salão específico
+GET http://localhost:3000/salao/1/servicos
+Content-Type: application/json
+Authorization: Bearer 7bae5cfe8d1ee2ae2710a148dd03af18
+
+### Listar salões favoritos
+GET http://localhost:3000/favoritos
+Content-Type: application/json
+Authorization: Bearer 7bae5cfe8d1ee2ae2710a148dd03af18
+
+### Remover salão dos favoritos
+DELETE http://localhost:3000/favoritos/1
+Authorization: Bearer 7bae5cfe8d1ee2ae2710a148dd03af18
