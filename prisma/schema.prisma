@@ -1,0 +1,83 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Usuario {
+  id          Int          @id @default(autoincrement())
+  nome        String       @db.VarChar(255)
+  email       String       @unique @db.VarChar(255)
+  senha       String       @db.VarChar(255)
+  token       String?      @db.VarChar(255)
+  favoritos   Favorito[]   // Relação com Favorito
+  agendamentos Agendamento[] // Relação com Agendamento
+}
+
+model Salao {
+  id         Int        @id @default(autoincrement())
+  nome       String     @db.VarChar(255)
+  logo       String     @db.VarChar(255)
+  endereco   String     @db.VarChar(255)
+  atendente  Atendente? @relation(fields: [atendenteId], references: [id])
+  atendenteId Int?
+  servicos   Servico[]  // Relação com Servico
+  favoritos   Favorito[] // Relação com Favorito
+}
+
+model Servico {
+  id          Int        @id @default(autoincrement())
+  nome        String
+  descricao   String
+  valor       Float
+  salaoId     Int
+  salao      Salao      @relation(fields: [salaoId], references: [id])
+  horarios    Horario[]  // Relação com Horario
+  agendamentos Agendamento[] // Relação com Agendamento
+}
+
+model Favorito {
+  id        Int      @id @default(autoincrement())
+  usuario   Usuario  @relation(fields: [usuarioId], references: [id])
+  usuarioId Int
+  salao     Salao    @relation(fields: [salaoId], references: [id])
+  salaoId   Int
+
+  @@unique([usuarioId, salaoId]) // Garante que um usuário só possa ter um salão favorito uma vez
+}
+
+model Atendente {
+  id        Int      @id @default(autoincrement())
+  nome      String   @db.VarChar(255)
+  foto      String   @db.VarChar(255)
+  bio       String   @db.Text
+  salao     Salao[]  // Um atendente pode estar associado a múltiplos salões
+}
+
+model Agendamento {
+  id          Int       @id @default(autoincrement())
+  usuarioId   Int
+  servicoId   Int
+  dataHora    DateTime
+  usuario     Usuario   @relation(fields: [usuarioId], references: [id])
+  servico     Servico   @relation(fields: [servicoId], references: [id])
+
+  @@unique([usuarioId, dataHora]) // Garante que um usuário não possa agendar duas vezes no mesmo horário
+}
+
+model Horario {
+  id        Int      @id @default(autoincrement())
+  servico   Servico  @relation(fields: [servicoId], references: [id])
+  servicoId Int
+  dataHora  DateTime
+  disponivel Boolean  @default(true) // Indica se o horário está disponível
+}

@@ -1,0 +1,73 @@
+### Teste de Registro de Usuário
+POST http://localhost:3000/cadastro
+Content-Type: application/json
+
+{
+  "nome": "João Silva",
+  "email": "joao.silva@example.com",
+  "senha": "senhaSegura123"
+}
+
+### Teste de Login de Usuário
+POST http://localhost:3000/login
+Content-Type: application/json
+
+{
+  "email": "joao.silva@example.com",
+  "senha": "senhaSegura123"
+}
+
+### Listar todos os salões
+GET http://localhost:3000/saloes
+Content-Type: application/json
+Authorization: Bearer fd2b30095e143b630f1c4432c9bc38e9
+
+### Obter detalhes de um salão específico
+GET http://localhost:3000/salao/1
+Content-Type: application/json
+Authorization: Bearer fd2b30095e143b630f1c4432c9bc38e9
+
+### Adicionar salão aos favoritos
+POST http://localhost:3000/favoritos
+Content-Type: application/json
+Authorization: Bearer fd2b30095e143b630f1c4432c9bc38e9
+{
+  "salaoId": 1
+}
+
+### Listar serviços de um salão específico
+GET http://localhost:3000/salao/1/servicos
+Content-Type: application/json
+Authorization: Bearer fd2b30095e143b630f1c4432c9bc38e9
+
+### Listar salões favoritos
+GET http://localhost:3000/favoritos
+Content-Type: application/json
+Authorization: Bearer fd2b30095e143b630f1c4432c9bc38e9
+
+### Remover salão dos favoritos
+DELETE http://localhost:3000/favoritos/1
+Authorization: Bearer fd2b30095e143b630f1c4432c9bc38e9
+
+###Lista horários 
+GET http://localhost:3000/servico/1/horarios
+Authorization: Bearer fd2b30095e143b630f1c4432c9bc38e9
+
+### Realizar agendamento 
+POST http://localhost:3000/agendamentos
+Content-Type: application/json
+Authorization: Bearer fd2b30095e143b630f1c4432c9bc38e9
+
+{
+  "servicoId": 1,
+  "dataHora": "2024-10-23T09:00:00Z"
+}
+
+### Listar agendamentos 
+GET http://localhost:3000/agendamentos
+Content-Type: application/json
+Authorization: Bearer fd2b30095e143b630f1c4432c9bc38e9
+
+### Cancelar agendamento
+DELETE http://localhost:3000/agendamentos/1
+Authorization: Bearer 0a5cc47819a804e5a7f09debd9739992
